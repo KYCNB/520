@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>每日遗憾</title>
+
   <style>
     body {
       margin: 0;
-      font-family: "Helvetica Neue", sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
       color: white;
       display: flex;
       justify-content: center;
@@ -20,16 +21,17 @@
 
     .overlay {
       background: rgba(0,0,0,0.4);
-      padding: 30px;
-      border-radius: 16px;
+      padding: 40px;
+      border-radius: 20px;
       max-width: 80%;
       text-align: center;
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(12px);
     }
 
     .text {
-      font-size: 24px;
-      line-height: 1.6;
+      font-size: 26px;
+      line-height: 1.8;
+      letter-spacing: 1px;
     }
 
     .date {
@@ -39,14 +41,16 @@
     }
   </style>
 </head>
+
 <body>
   <div class="overlay">
-    <div class="text" id="text">加载中...</div>
+    <div class="text" id="text">...</div>
     <div class="date" id="date"></div>
   </div>
 
 <script>
-// 自定义伤感失恋文案库（更贴近“遗憾、放下”）
+
+// ====== 文案库（失恋 / 遗憾 / 放下）======
 const TEXT_LIST = [
   "后来我终于不再打扰你了，你也真的不再需要我了。",
   "我们最后的默契，就是谁也没有再联系谁。",
@@ -70,36 +74,37 @@ const TEXT_LIST = [
   "你教会我怎么爱人，却没陪我到最后。"
 ];
 
-// 随机图片API（每日不同）
-const IMAGE_API = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&h=900&q=80";
+// ====== 背景图库（稳定+有氛围）======
+const IMAGE_LIST = [
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+  "https://images.unsplash.com/photo-1495567720989-cebdbdd97913",
+  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+  "https://images.unsplash.com/photo-1470770841072-f978cf4d019e",
+  "https://images.unsplash.com/photo-1493244040629-496f6d136cc3"
+];
 
-async function loadContent() {
-  try {
-    // 根据日期固定每日一句（每天不同，但不会乱跳）
-    const today = new Date().toISOString().slice(0,10);
-    let hash = 0;
-    for (let i = 0; i < today.length; i++) {
-      hash = today.charCodeAt(i) + ((hash << 5) - hash);
-    }
-    const index = Math.abs(hash) % TEXT_LIST.length;
-    const text = TEXT_LIST[index];
-    document.getElementById("text").innerText = text;
-
-    // 设置背景图（带时间戳避免缓存）
-    const today = new Date().toISOString().slice(0,10);
-    // 使用时间戳避免缓存，确保每天刷新
-    document.body.style.backgroundImage = `url(${IMAGE_API}&t=${today})`;
-
-    // 显示日期
-    const date = new Date().toLocaleDateString();
-    document.getElementById("date").innerText = date;
-
-  } catch (e) {
-    document.getElementById("text").innerText = "今天的遗憾加载失败了...";
+// ====== 根据日期生成“每日固定内容”======
+function getDailyIndex(listLength) {
+  const today = new Date().toISOString().slice(0,10);
+  let hash = 0;
+  for (let i = 0; i < today.length; i++) {
+    hash = today.charCodeAt(i) + ((hash << 5) - hash);
   }
+  return Math.abs(hash) % listLength;
 }
 
-loadContent();
+// ====== 设置文案 ======
+const textIndex = getDailyIndex(TEXT_LIST.length);
+document.getElementById("text").innerText = TEXT_LIST[textIndex];
+
+// ====== 设置背景 ======
+const imgIndex = getDailyIndex(IMAGE_LIST.length);
+const imgUrl = IMAGE_LIST[imgIndex] + "?auto=format&fit=crop&w=1600&q=80";
+document.body.style.backgroundImage = `url(${imgUrl})`;
+
+// ====== 设置日期 ======
+document.getElementById("date").innerText = new Date().toLocaleDateString();
+
 </script>
 </body>
 </html>
