@@ -50,7 +50,7 @@
 const TEXT_API = "https://v1.hitokoto.cn/?c=d&encode=text";
 
 // 随机图片API（每日不同）
-const IMAGE_API = "https://source.unsplash.com/1600x900/?lonely,sad";
+const IMAGE_API = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&h=900&q=80";
 
 async function loadContent() {
   try {
@@ -61,7 +61,8 @@ async function loadContent() {
 
     // 设置背景图（带时间戳避免缓存）
     const today = new Date().toISOString().slice(0,10);
-    document.body.style.backgroundImage = `url(${IMAGE_API}&sig=${today})`;
+    // 使用时间戳避免缓存，确保每天刷新
+    document.body.style.backgroundImage = `url(${IMAGE_API}&t=${today})`;
 
     // 显示日期
     const date = new Date().toLocaleDateString();
