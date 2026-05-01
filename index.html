@@ -46,17 +46,35 @@
   </div>
 
 <script>
-// 伤感文案API（你可以替换成自己的）
-const TEXT_API = "https://v1.hitokoto.cn/?c=d&encode=text";
+// 自定义伤感失恋文案库（更贴近“遗憾、放下”）
+const TEXT_LIST = [
+  "后来才明白，不是放不下你，是放不下那段以为会有结果的自己。",
+  "我们没有走散，只是停在了不同的方向。",
+  "你教会我爱，却没教我怎么忘记你。",
+  "遗憾的是没能走到最后，不遗憾的是曾经认真爱过。",
+  "后来我也能笑着提起你，只是再也没有当初的那种勇气了。",
+  "我试着把你还给人海，却总在夜里偷偷想你。",
+  "那天你没回头，我也没再挽留，从此就真的结束了。",
+  "不是不爱了，是爱到最后只能选择放过彼此。",
+  "我们都很默契，你不再联系，我也不再打扰。",
+  "原来最难的不是失去，而是学会好好放下。",
+  "故事不长，也不难讲，只不过是相识一场，爱而不得。",
+  "你是我未完成的心事，也是我无法重来的过去。"
+];
 
 // 随机图片API（每日不同）
 const IMAGE_API = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&h=900&q=80";
 
 async function loadContent() {
   try {
-    // 获取文案
-    const textRes = await fetch(TEXT_API);
-    const text = await textRes.text();
+    // 根据日期固定每日一句（每天不同，但不会乱跳）
+    const today = new Date().toISOString().slice(0,10);
+    let hash = 0;
+    for (let i = 0; i < today.length; i++) {
+      hash = today.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const index = Math.abs(hash) % TEXT_LIST.length;
+    const text = TEXT_LIST[index];
     document.getElementById("text").innerText = text;
 
     // 设置背景图（带时间戳避免缓存）
