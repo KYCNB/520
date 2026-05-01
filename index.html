@@ -6,51 +6,96 @@
   <title>每日遗憾</title>
 
   <style>
-    body {
+    * {
       margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", sans-serif;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-size: cover;
-      background-position: center;
-      transition: background-image 1s ease-in-out;
+      padding: 0;
+      box-sizing: border-box;
     }
 
-    .overlay {
-      background: rgba(0,0,0,0.4);
-      padding: 40px;
-      border-radius: 20px;
-      max-width: 80%;
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* 暗色渐变遮罩（类似你给的网站） */
+    body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.2),
+        rgba(0,0,0,0.7)
+      );
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
       text-align: center;
-      backdrop-filter: blur(12px);
+      max-width: 800px;
+      padding: 40px;
     }
 
     .text {
-      font-size: 26px;
+      font-size: 32px;
       line-height: 1.8;
-      letter-spacing: 1px;
+      letter-spacing: 2px;
+      font-weight: 300;
+      animation: fadeIn 1.5s ease;
     }
 
     .date {
-      margin-top: 20px;
+      margin-top: 30px;
       font-size: 14px;
-      opacity: 0.7;
+      opacity: 0.6;
+      letter-spacing: 2px;
     }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 底部小字 */
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.5;
+      letter-spacing: 1px;
+    }
+
   </style>
 </head>
 
 <body>
-  <div class="overlay">
-    <div class="text" id="text">...</div>
-    <div class="date" id="date"></div>
-  </div>
+
+<div class="container">
+  <div class="text" id="text">...</div>
+  <div class="date" id="date"></div>
+</div>
+
+<div class="footer">有些话，只适合留在心里</div>
 
 <script>
 
-// ====== 文案库（失恋 / 遗憾 / 放下）======
 const TEXT_LIST = [
   "后来我终于不再打扰你了，你也真的不再需要我了。",
   "我们最后的默契，就是谁也没有再联系谁。",
@@ -74,7 +119,6 @@ const TEXT_LIST = [
   "你教会我怎么爱人，却没陪我到最后。"
 ];
 
-// ====== 背景图库（稳定+有氛围）======
 const IMAGE_LIST = [
   "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
   "https://images.unsplash.com/photo-1495567720989-cebdbdd97913",
@@ -83,28 +127,183 @@ const IMAGE_LIST = [
   "https://images.unsplash.com/photo-1493244040629-496f6d136cc3"
 ];
 
-// ====== 根据日期生成“每日固定内容”======
-function getDailyIndex(listLength) {
+function getDailyIndex(len) {
   const today = new Date().toISOString().slice(0,10);
   let hash = 0;
   for (let i = 0; i < today.length; i++) {
     hash = today.charCodeAt(i) + ((hash << 5) - hash);
   }
-  return Math.abs(hash) % listLength;
+  return Math.abs(hash) % len;
 }
 
-// ====== 设置文案 ======
+// 文案
 const textIndex = getDailyIndex(TEXT_LIST.length);
 document.getElementById("text").innerText = TEXT_LIST[textIndex];
 
-// ====== 设置背景 ======
+// 背景
 const imgIndex = getDailyIndex(IMAGE_LIST.length);
 const imgUrl = IMAGE_LIST[imgIndex] + "?auto=format&fit=crop&w=1600&q=80";
 document.body.style.backgroundImage = `url(${imgUrl})`;
 
-// ====== 设置日期 ======
-document.getElementById("date").innerText = new Date().toLocaleDateString();
+// 日期
+const d = new Date();
+document.getElementById("date").innerText = d.getFullYear() + "." + (d.getMonth()+1) + "." + d.getDate();
 
 </script>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>每日遗憾</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-size: cover;
+      background-position: center;
+      color: #fff;
+      overflow: hidden;
+    }
+
+    /* 暗色渐变遮罩（类似你给的网站） */
+    body::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        rgba(0,0,0,0.2),
+        rgba(0,0,0,0.7)
+      );
+      z-index: 0;
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 800px;
+      padding: 40px;
+    }
+
+    .text {
+      font-size: 32px;
+      line-height: 1.8;
+      letter-spacing: 2px;
+      font-weight: 300;
+      animation: fadeIn 1.5s ease;
+    }
+
+    .date {
+      margin-top: 30px;
+      font-size: 14px;
+      opacity: 0.6;
+      letter-spacing: 2px;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* 底部小字 */
+    .footer {
+      position: absolute;
+      bottom: 20px;
+      width: 100%;
+      text-align: center;
+      font-size: 12px;
+      opacity: 0.5;
+      letter-spacing: 1px;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="text" id="text">...</div>
+  <div class="date" id="date"></div>
+</div>
+
+<div class="footer">有些话，只适合留在心里</div>
+
+<script>
+
+const TEXT_LIST = [
+  "后来我终于不再打扰你了，你也真的不再需要我了。",
+  "我们最后的默契，就是谁也没有再联系谁。",
+  "你只陪了我一段路，我却差点以为是余生。",
+  "后来我才明白，遗憾才是人生的常态。",
+  "我删了你所有的联系方式，却删不掉那些习惯。",
+  "那段日子挺过来了，可你再也回不来了。",
+  "我们没有在一起，但我好像失去了你很多次。",
+  "你是我藏在心底的名字，也是我不敢再提的人。",
+  "如果当时再勇敢一点，结局会不会不一样。",
+  "我没说再见，是因为再见真的很难。",
+  "其实我早就知道结局，只是舍不得退出。",
+  "我们都没有错，只是刚好错过了。",
+  "后来我变得很冷静，也不再期待谁会坚定选择我。",
+  "你回头看过我吗，哪怕一眼也好。",
+  "我已经很久没哭了，只是偶尔会突然难过。",
+  "原来放下一个人，是连他的消息都不想再听到。",
+  "我还在原地，而你早就走远了。",
+  "不是不想爱了，是再也不敢那样去爱了。",
+  "有些人光是遇见，就已经花光了所有运气。",
+  "你教会我怎么爱人，却没陪我到最后。"
+];
+
+const IMAGE_LIST = [
+  "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee",
+  "https://images.unsplash.com/photo-1495567720989-cebdbdd97913",
+  "https://images.unsplash.com/photo-1507525428034-b723cf961d3e",
+  "https://images.unsplash.com/photo-1470770841072-f978cf4d019e",
+  "https://images.unsplash.com/photo-1493244040629-496f6d136cc3"
+];
+
+function getDailyIndex(len) {
+  const today = new Date().toISOString().slice(0,10);
+  let hash = 0;
+  for (let i = 0; i < today.length; i++) {
+    hash = today.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  return Math.abs(hash) % len;
+}
+
+// 文案
+const textIndex = getDailyIndex(TEXT_LIST.length);
+document.getElementById("text").innerText = TEXT_LIST[textIndex];
+
+// 背景
+const imgIndex = getDailyIndex(IMAGE_LIST.length);
+const imgUrl = IMAGE_LIST[imgIndex] + "?auto=format&fit=crop&w=1600&q=80";
+document.body.style.backgroundImage = `url(${imgUrl})`;
+
+// 日期
+const d = new Date();
+document.getElementById("date").innerText = d.getFullYear() + "." + (d.getMonth()+1) + "." + d.getDate();
+
+</script>
+
 </body>
 </html>
