@@ -44,8 +44,9 @@ body{
   text-align:center;
   max-width:78%;
   text-shadow:0 15px 50px #000;
+
   opacity:0;
-  transition:opacity 2.5s ease;
+  transition:opacity 1.8s ease;
 }
 
 /* 呼吸 */
@@ -55,7 +56,7 @@ body{
   100%{transform:translate(-50%,-50%) scale(1);}
 }
 
-/* 轻微抖动 */
+/* 微抖 */
 @keyframes shake{
   0%{transform:translate(-50%,-50%)}
   25%{transform:translate(calc(-50% + .5px),calc(-50% - .5px))}
@@ -111,8 +112,9 @@ const TEXT = [
 // ===== 图库 =====
 let IMAGES=[];
 
-// ===== 首次标记 =====
+// ===== 状态 =====
 let first = true;
+let currentText = "";
 
 // 加载图库
 async function load(){
@@ -120,6 +122,15 @@ async function load(){
   let data=await res.json();
   IMAGES=data.images;
   next();
+}
+
+// 自动阅读时间
+function autoNext(text){
+  let speed = 6; // 每秒6字
+  let readTime = text.length / speed;
+  let total = (readTime + 2) * 1000;
+
+  setTimeout(next, total);
 }
 
 // 切换
@@ -133,29 +144,35 @@ function next(){
 
   let el=document.getElementById("text");
 
-  // 首次必显示，之后20%留白
   let showText = first ? true : Math.random() > 0.2;
 
+  // 淡出
   el.classList.remove("show");
 
   setTimeout(()=>{
+
     if(showText){
-      el.innerText = first
+      currentText = first
         ? FIRST[Math.floor(Math.random()*FIRST.length)]
         : TEXT[Math.floor(Math.random()*TEXT.length)];
 
-      el.classList.add("show");
+      el.innerText = currentText;
+
+      requestAnimationFrame(()=>{
+        el.classList.add("show"); // 淡入
+      });
+
+      autoNext(currentText);
+
     }else{
       el.innerText = "";
+      setTimeout(next, 3000);
     }
 
     first = false;
 
-  },400);
+  },1800); // 和CSS渐隐一致
 }
-
-// 自动节奏（慢）
-setInterval(next,10000);
 
 // 点击切换
 document.body.addEventListener("click",next);
